@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="codilar.prescription" type="topic" connection="amqp" durable="true">
+        <binding id="codilarPrescriptionUploadedBinding"
+                 topic="codilar.prescription.uploaded"
+                 destinationType="queue"
+                 destination="codilar.prescription.notification"/>
+    </exchange>
+</config>

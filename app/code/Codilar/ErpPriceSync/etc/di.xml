@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Dedicated logger: var/log/erp_price_sync.log -->
+    <virtualType name="Codilar\ErpPriceSync\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/erp_price_sync.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Codilar\ErpPriceSync\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">erpPriceSync</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="file" xsi:type="object">Codilar\ErpPriceSync\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Prices come from the mock ERP table (erp_product_price) -->
+    <preference for="Codilar\ErpPriceSync\Api\PriceProviderInterface"
+                type="Codilar\ErpPriceSync\Model\Provider\TableProvider"/>
+
+    <type name="Codilar\ErpPriceSync\Model\SyncService">
+        <arguments>
+            <argument name="logger" xsi:type="object">Codilar\ErpPriceSync\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Codilar\ErpPriceSync\Cron\SyncPrices">
+        <arguments>
+            <argument name="logger" xsi:type="object">Codilar\ErpPriceSync\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- CLI: bin/magento erp:price:sync (SyncService proxied so it is only built when the command runs) -->
+    <type name="Codilar\ErpPriceSync\Console\Command\SyncCommand">
+        <arguments>
+            <argument name="syncService" xsi:type="object">Codilar\ErpPriceSync\Model\SyncService\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="erp_price_sync" xsi:type="object">Codilar\ErpPriceSync\Console\Command\SyncCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

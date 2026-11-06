@@ -1,0 +1,18 @@
+<!--@subject {{trans "Your prescription for order #%order_increment_id has been received" order_increment_id=$order_increment_id}} @-->
+<!--@vars {
+"var customer_name":"Customer Name",
+"var order_increment_id":"Order Number",
+"var prescription_file":"Prescription File"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p class="greeting">{{trans "Hello %name," name=$customer_name}}</p>
+<p>{{trans "We have received your prescription and it has been attached to your order."}}</p>
+<table>
+    <tr><th align="left">{{trans "Order"}}</th><td>#{{var order_increment_id}}</td></tr>
+    <tr><th align="left">{{trans "File"}}</th><td>{{var prescription_file}}</td></tr>
+</table>
+<p>{{trans "Our pharmacist will review it shortly. We will contact you if anything else is needed."}}</p>
+
+{{template config_path="design/email/footer_template"}}

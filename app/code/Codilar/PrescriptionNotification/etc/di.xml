@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Dedicated log file: var/log/prescription_notification.log -->
+    <virtualType name="Codilar\PrescriptionNotification\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/prescription_notification.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Codilar\PrescriptionNotification\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">prescriptionNotification</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="file" xsi:type="object">Codilar\PrescriptionNotification\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Codilar\PrescriptionNotification\Model\Queue\Consumer">
+        <arguments>
+            <argument name="logger" xsi:type="object">Codilar\PrescriptionNotification\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Codilar\PrescriptionNotification\Observer\PublishPrescriptionUploaded">
+        <arguments>
+            <argument name="logger" xsi:type="object">Codilar\PrescriptionNotification\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Codilar\PrescriptionNotification\Controller\Upload\Save">
+        <arguments>
+            <argument name="logger" xsi:type="object">Codilar\PrescriptionNotification\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="codilar_prescription_publish" xsi:type="object">Codilar\PrescriptionNotification\Console\Command\PublishTestMessage</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

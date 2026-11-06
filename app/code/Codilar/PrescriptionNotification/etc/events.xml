@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Detect prescription upload and publish to RabbitMQ -->
+    <event name="codilar_prescription_uploaded">
+        <observer name="codilar_prescription_publish_to_queue"
+                  instance="Codilar\PrescriptionNotification\Observer\PublishPrescriptionUploaded"/>
+    </event>
+</config>

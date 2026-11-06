@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <!-- Payload is a JSON string: {"customer_id":200,"order_id":10001,"prescription_file":"prescription.pdf"} -->
+    <topic name="codilar.prescription.uploaded" request="string">
+        <handler name="codilarPrescriptionNotificationHandler"
+                 type="Codilar\PrescriptionNotification\Model\Queue\Consumer" method="process"/>
+    </topic>
+</config>

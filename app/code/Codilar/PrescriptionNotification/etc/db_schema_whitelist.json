@@ -1,0 +1,26 @@
+{
+    "codilar_prescription_upload": {
+        "column": {
+            "entity_id": true,
+            "customer_id": true,
+            "order_id": true,
+            "prescription_file": true,
+            "original_name": true,
+            "status": true,
+            "attempts": true,
+            "error_message": true,
+            "created_at": true,
+            "updated_at": true,
+            "notified_at": true
+        },
+        "index": {
+            "CODILAR_PRESCRIPTION_UPLOAD_STATUS": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CODILAR_PRESCRIPTION_UPLOAD_CSTR_ID_ORDER_ID_PRESCRIPTION_FILE": true,
+            "CODILAR_PRESCRIPTION_UPLOAD_CSTR_ID_CSTR_ENTT_ENTT_ID": true,
+            "CODILAR_PRESCRIPTION_UPLOAD_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    }
+}

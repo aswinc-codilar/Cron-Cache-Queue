@@ -1,0 +1,84 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Codilar\PrescriptionNotification\ViewModel\PrescriptionUpload $viewModel */
+$viewModel = $block->getData('view_model');
+$orders = $viewModel->getOrders();
+$uploads = $viewModel->getUploads();
+?>
+<?php if (!$viewModel->isEnabled()): ?>
+    <div class="message info empty"><span><?= $escaper->escapeHtml(__('Prescription upload is currently disabled.')) ?></span></div>
+<?php elseif (!$orders->getSize()): ?>
+    <div class="message info empty"><span><?= $escaper->escapeHtml(__('You need to place an order before uploading a prescription.')) ?></span></div>
+<?php else: ?>
+    <form class="form prescription-upload"
+          action="<?= $escaper->escapeUrl($viewModel->getFormAction()) ?>"
+          method="post"
+          enctype="multipart/form-data"
+          data-mage-init='{"validation":{}}'>
+        <?= $block->getBlockHtml('formkey') ?>
+        <fieldset class="fieldset">
+            <legend class="legend"><span><?= $escaper->escapeHtml(__('Upload Prescription')) ?></span></legend>
+
+            <div class="field order_id required">
+                <label class="label" for="prescription-order"><span><?= $escaper->escapeHtml(__('Order')) ?></span></label>
+                <div class="control">
+                    <select id="prescription-order" name="order_id" data-validate='{"required":true}'>
+                        <option value=""><?= $escaper->escapeHtml(__('-- Select an order --')) ?></option>
+                        <?php foreach ($orders as $order): ?>
+                            <option value="<?= (int)$order->getId() ?>">
+                                #<?= $escaper->escapeHtml($order->getIncrementId()) ?>
+                                — <?= $escaper->escapeHtml($block->formatDate($order->getCreatedAt())) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field prescription_file required">
+                <label class="label" for="prescription-file"><span><?= $escaper->escapeHtml(__('Prescription File')) ?></span></label>
+                <div class="control">
+                    <input type="file" id="prescription-file" name="prescription_file"
+                           accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                           data-validate='{"required":true}'/>
+                    <div class="note">
+                        <?= $escaper->escapeHtml(__('PDF, JPG or PNG, up to %1 MB.', $viewModel->getMaxFileSizeMb())) ?>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit" class="action submit primary"><span><?= $escaper->escapeHtml(__('Upload')) ?></span></button>
+            </div>
+        </div>
+    </form>
+<?php endif; ?>
+
+<?php if ($uploads->getSize()): ?>
+    <div class="block block-prescription-history">
+        <div class="block-title"><strong><?= $escaper->escapeHtml(__('My Prescriptions')) ?></strong></div>
+        <div class="table-wrapper">
+            <table class="data table">
+                <thead>
+                <tr>
+                    <th scope="col"><?= $escaper->escapeHtml(__('File')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Order')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Uploaded')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($uploads as $upload): ?>
+                    <tr>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('File')) ?>"><?= $escaper->escapeHtml($upload->getOriginalName() ?: $upload->getPrescriptionFile()) ?></td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Order')) ?>">#<?= $escaper->escapeHtml($upload->getIncrementId()) ?></td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Uploaded')) ?>"><?= $escaper->escapeHtml($block->formatDate($upload->getCreatedAt(), \IntlDateFormatter::MEDIUM, true)) ?></td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Status')) ?>"><?= $escaper->escapeHtml($viewModel->getStatusLabel((string)$upload->getStatus())) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif; ?>

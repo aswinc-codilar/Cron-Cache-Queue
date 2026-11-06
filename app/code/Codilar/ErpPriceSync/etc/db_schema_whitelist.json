@@ -1,0 +1,19 @@
+{
+    "erp_product_price": {
+        "column": {
+            "entity_id": true,
+            "sku": true,
+            "price": true,
+            "updated_at": true,
+            "synced_at": true,
+            "last_error": true
+        },
+        "index": {
+            "ERP_PRODUCT_PRICE_UPDATED_AT_SYNCED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ERP_PRODUCT_PRICE_SKU": true
+        }
+    }
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Codilar\CategoryCache\Api\CategoryDetailsInterface"
+                type="Codilar\CategoryCache\Model\CategoryDetails"/>
+
+    <!-- Dedicated logger: var/log/category_cache.log (debug level shows HIT/MISS) -->
+    <virtualType name="Codilar\CategoryCache\Logger\Handler" type="Magento\Framework\Logger\Handler\Debug">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/category_cache.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Codilar\CategoryCache\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">categoryCache</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="file" xsi:type="object">Codilar\CategoryCache\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Codilar\CategoryCache\Model\CategoryDetails">
+        <arguments>
+            <argument name="logger" xsi:type="object">Codilar\CategoryCache\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- CLI commands (service proxied so it is only built when a command runs) -->
+    <type name="Codilar\CategoryCache\Console\Command\GetCommand">
+        <arguments>
+            <argument name="categoryDetails" xsi:type="object">Codilar\CategoryCache\Api\CategoryDetailsInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Codilar\CategoryCache\Console\Command\CleanCommand">
+        <arguments>
+            <argument name="categoryDetails" xsi:type="object">Codilar\CategoryCache\Api\CategoryDetailsInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="codilar_category_get" xsi:type="object">Codilar\CategoryCache\Console\Command\GetCommand</item>
+                <item name="codilar_category_cache_clean" xsi:type="object">Codilar\CategoryCache\Console\Command\CleanCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <codilar_prescription>
+            <general>
+                <enabled>1</enabled>
+                <max_file_size_mb>5</max_file_size_mb>
+            </general>
+            <email>
+                <sender>general</sender>
+                <template>codilar_prescription_email_template</template>
+                <copy_to/>
+            </email>
+        </codilar_prescription>
+    </default>
+</config>

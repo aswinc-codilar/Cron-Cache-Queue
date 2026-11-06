@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="codilar_erp_price_sync" instance="Codilar\ErpPriceSync\Cron\SyncPrices" method="execute">
+            <config_path>erp_price_sync/general/cron_schedule</config_path>
+        </job>
+    </group>
+</config>

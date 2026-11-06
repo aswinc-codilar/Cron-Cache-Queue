@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- Shows up in System > Cache Management and in bin/magento cache:status -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="codilar_category_details" translate="label,description"
+          instance="Codilar\CategoryCache\Model\Cache\Type\CategoryDetails">
+        <label>Codilar Category Details</label>
+        <description>Category ID, name and URL, cached per category and store view.</description>
+    </type>
+</config>

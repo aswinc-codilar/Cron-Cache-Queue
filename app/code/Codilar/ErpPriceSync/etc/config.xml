@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <erp_price_sync>
+            <general>
+                <enabled>1</enabled>
+                <cron_schedule>* * * * *</cron_schedule>
+                <batch_size>500</batch_size>
+            </general>
+        </erp_price_sync>
+    </default>
+</config>
